@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Doctris - Doctor Appointment Booking System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Bootstrap 4 Landing Page Template" />
+    <meta name="keywords" content="Appointment, Booking, System, Dashboard, Health" />
+    <meta name="author" content="Shreethemes" />
+    <meta name="email" content="support@shreethemes.in" />
+    <meta name="website" content="../../../dashboard" />
+    <meta name="Version" content="v1.2.0" />
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico.png}">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- simplebar -->
+    <link th:href="@{/css/simplebar.css}" rel="stylesheet" type="text/css" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/remixicon.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{https://unicons.iconscout.com/release/v3.0.6/css/line.css}" rel="stylesheet">
+    <!-- Css -->
+    <link th:href="@{/css/style.min.css}" rel="stylesheet" type="text/css" id="theme-opt" />
+
+    <script th:src="@{https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js}"></script>
+    <style>
+        .preview-box {
+            max-width: 100%;
+        }
+
+        .preview-box img {
+            max-width: 100%;
+            /* Ensure the image doesn't exceed the box width */
+            max-height: 100%;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .bg-text {
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/opacity/see-through */
+            color: white;
+            font-weight: bold;
+            border: 3px solid #f1f1f1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -150%);
+            z-index: 2;
+            min-width: 80%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #leftPosition,
+        #rightPosition {
+            width: 100%;
+            height: 500px;
+            margin: 10px;
+            overflow-y: scroll;
+        }
+
+        .list {
+            text-align: center;
+            border-radius: 10px;
+            background: rgb(33, 64, 150);
+            height: 60px;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            cursor: grab;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-wrapper doctris-theme toggled">
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div lang="en" th:include="admin/sidebar :: sidebar"></div>
+        </nav>
+        <!-- sidebar-wrapper  -->
+
+        <!-- Start Page Content -->
+        <div th:if="${message!=null}" th:text="${message}" id="notification" style="display: none;">
+        </div>
+        <script>
+            window.addEventListener("load", () => {
+                var notificationDiv = document.getElementById('notification');
+                notificationDiv.style.display = 'block';
+                notificationDiv.style.position = 'fixed';
+                notificationDiv.style.marginTop = '100px';
+                notificationDiv.style.marginLeft = '50vw';
+                notificationDiv.className = "alert alert-success";
+                notificationDiv.role = "alert";
+                setTimeout(function () {
+                    notificationDiv.style.display = 'none';
+                }, 3000); // 5 seconds
+            })
+        </script>
+        <main class="page-content bg-light">
+            <div class="top-header">
+                <div class="header-bar d-flex justify-content-between border-bottom">
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="logo-icon">
+                            <img src="../images/logo-icon.png" height="30" class="small" alt="">
+                            <span class="big">
+                                <img src="../images/logo-dark.png" height="24" class="logo-light-mode" alt="">
+                                <img src="../images/logo-light.png" height="24" class="logo-dark-mode" alt="">
+                            </span>
+                        </a>
+                        <a id="close-sidebar" class="btn btn-icon btn-pills btn-soft-primary ms-2" href="#">
+                            <i class="uil uil-bars"></i>
+                        </a>
+                        <div class="search-bar p-0 d-none d-lg-block ms-2">
+                            <div id="search" class="menu-search mb-0">
+                                <form th:action="@{/servicesManagement/search}" role="search" method="get"
+                                    id="searchform" class="searchform">
+                                    <div>
+                                        <input th:value="${searchText}" type="text"
+                                            class="form-control border rounded-pill" name="searchText" id="searchInput"
+                                            placeholder="Search Keywords..." autofocus>
+                                        <input type="submit" id="searchsubmit" value="Search" style="display: none;">
+                                    </div>
+                                    <script>
+                                        const searchForm = document.getElementById('searchform');
+                                        const searchInput = document.getElementById('searchInput');
+                                        var delayTimer;
+                                        // Add an input event listener to the searchInput field
+                                        searchInput.addEventListener('input', function () {
+                                            // Submit the form when the user types
+                                            clearTimeout(delayTimer); // Clear any previous timers
+                                            delayTimer = setTimeout(function () {
+                                                searchForm.submit(); // Submit the form after a one-second delay
+                                            }, 300);
+                                        });
+                                        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+
+                                    </script>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="list-unstyled mb-0">
+
+
+
+                        <li class="list-inline-item mb-0 ms-1">
+                            <div class="dropdown dropdown-primary">
+                                <button type="button" class="btn btn-pills btn-soft-primary dropdown-toggle p-0"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                                        th:src="@{${session.user.image}}" class="avatar avatar-ex-small rounded-circle"
+                                        alt=""></button>
+                                <div class="dropdown-menu dd-menu dropdown-menu-end bg-white shadow border-0 mt-3 py-3"
+                                    style="min-width: 200px;">
+                                    <a class="dropdown-item d-flex align-items-center text-dark"
+                                        th:href="@{/user-profile}">
+                                        <img th:src="@{${session.user.image}}"
+                                            class="avatar avatar-md-sm rounded-circle border shadow" alt="">
+                                        <div class="flex-1 ms-2">
+                                            <span class="d-block mb-1" th:text="@{${session.user.full_name}}"></span>
+
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item text-dark" href="dashboard"><span
+                                            class="mb-0 d-inline-block me-1"><i
+                                                class="uil uil-dashboard align-middle h6"></i></span> Dashboard</a>
+                                    <a class="dropdown-item text-dark" th:href="@{/user-profile}"><span
+                                            class="mb-0 d-inline-block me-1"><i
+                                                class="uil uil-setting align-middle h6"></i></span> Profile Settings</a>
+                                    <div class="dropdown-divider border-top"></div>
+                                    <a class="dropdown-item text-dark" th:href="@{/logout}"><span
+                                            class="mb-0 d-inline-block me-1"><i
+                                                class="uil uil-sign-out-alt align-middle h6"></i></span> Logout</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="layout-specing">
+                    <div class="d-md-flex justify-content-between">
+                        <h3 class="mb-0">Slider List</h3>
+
+                        <nav aria-label="breadcrumb" class="d-inline-block mt-4 mt-sm-0">
+                            <ul class="breadcrumb bg-transparent rounded mb-0 p-0">
+                                <li class="breadcrumb-item"><a href="dashboard">Doctris</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Sliders</li>
+                            </ul>
+                        </nav>
+                        <div class="d-md-flex justify-content-between">
+                            <div class="mt-4 mt-sm-0 mr-4">
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#editprofile">Slider
+                                    Position</a>
+                            </div>
+                            <div class="mt-4 mt-sm-0">
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#newblogadd">Add
+                                    Slider</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-md-flex justify-content-between mt-4">
+                        <div class="mb-0">
+                            <!-- <span style="font-size: larger;">Filter: </span>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false" th:if="${cat.Id==catId&&catId!=null}"
+                                    th:each="cat : ${listCate}" th:value="${cat.Id}" th:text="${cat.name}">
+                                    Category
+                                </button><button type="button" class="btn btn-primary dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false" th:if="${catId==null}">
+                                    Category
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" th:href="@{/servicesManagement}">--All Category--</a>
+                                    </li>
+                                    <li><a th:each="cat : ${listCate}" th:value="${cat.Id}" th:text="${cat.name}"
+                                            class="dropdown-item"
+                                            th:href="@{'/servicesManagement/filterCategory/'+${cat.Id}}"></a></li>
+                                </ul>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Status
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item"
+                                            th:href="@{'/servicesManagement/filterStatus/'+'1'}">Available</a></li>
+                                    <li><a class="dropdown-item"
+                                            th:href="@{'/servicesManagement/filterStatus/'+'0'}">Unavailable</a></li>
+                            </div>
+                        </div>
+                        <div class="d-md-flex">
+                            <span class="mb-0">Sort by:</span>
+                            <div class="dropdown " style="margin-left: 10px;">
+                                <div class="bg-soft-primary" style="width: 120px; text-align: center;"
+                                    onclick="toggleDropdown(this)" id="SortByName">Name</div>
+                                <div class="dropdown-content">
+                                    <a
+                                        th:href="@{'/servicesManagement/sort/'+'?sortField=name&sortDir=desc'}">Descending</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a
+                                        th:href="@{'/servicesManagement/sort/'+'?sortField=name&sortDir=asc'}">Ascending</a>
+                                </div>
+                            </div>
+                            <div class="dropdown " style="margin-left: 10px;">
+                                <div class="bg-soft-primary" style="width: 120px; text-align: center;"
+                                    onclick="toggleDropdown(this)" id="SortByPrice">Price</div>
+                                <div class="dropdown-content">
+                                    <a
+                                        th:href="@{'/servicesManagement/sort/'+'?sortField=price&sortDir=desc'}">Descending</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a
+                                        th:href="@{'/servicesManagement/sort/'+'?sortField=price&sortDir=asc'}">Ascending</a>
+                                </div>
+                            </div> -->
+
+                            <script>
+                                function toggleDropdown(element) {
+                                    const dropdownContent = element.nextElementSibling;
+                                    dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+                                }
+                            </script>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mt-4">
+                            <div class="table-responsive shadow rounded">
+                                <table class="table table-center bg-white mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-bottom p-3" style="min-width: 50px;">Id</th>
+                                            <th class="border-bottom p-3" style="min-width: 180px;">Slider Title</th>
+                                            <th class="border-bottom p-3" style="min-width: 100px;">Image</th>
+                                            <th class="border-bottom p-3">Back Link</th>
+                                            <th class="border-bottom p-3">Status</th>
+                                            <th class="border-bottom p-3" style="min-width: 150px;">Create Date</th>
+                                            <th class="border-bottom p-3">Order</th>
+                                            <th class="border-bottom p-3" style="width: 30px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <!-- <tr style="height: 50vh;" th:if="${totalService==0}">
+                                            <td colspan="10" style="text-align: center;" class="bg-soft-dark"><span
+                                                    style="font-size: xx-large; color: rgba(42, 54, 39, 0.575); font-weight: bold;">There
+                                                    is no service for your Search</span></td>
+                                        </tr> -->
+                                        <tr style="height: 60px;" th:each="listS:${slidersList}">
+                                            <th class="p-3" th:text="${listS.id}"></th>
+                                            <td class="py-3">
+                                                <a href="#" class="text-dark">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="ms-2" th:text="${listS.title}"></span>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td class="p-3"><img width="80px" th:src="@{${listS.image}}" alt=""></td>
+                                            <td class="p-3"><a th:href="@{${listS.backlink}}" target="_blank"><span
+                                                        th:text="'Back Link for Slider '+${listS.id}"></span></a></td>
+                                            <td th:if="${listS.status==1}">
+                                                <span th:text="Display"
+                                                    class="center-block badge bg-soft-success"></span>
+                                            </td>
+                                            <td th:if="${listS.status==0}">
+                                                <span th:text="Hidden" class="center-block badge bg-soft-danger"></span>
+                                            </td>
+                                            <td class="p-3" th:text="${listS.createDate}"></td>
+                                            <td class="p-3" th:text="${listS.position==0} ? '-':${listS.position}"></td>
+
+                                            <td class="text-end p-3">
+                                                <a th:href="@{/slidersManagement/slider-detail/{id}(id=${listS.id})}"
+                                                    class="btn btn-icon btn-pills btn-soft-success"><i
+                                                        class="uil uil-pen"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div><!--end row-->
+
+                    <!--IF NUMBER OF BLOG < 5 OR TOTAL PAGE >1 DISPLAY, IF NOT DISAPPEAR-->
+                    <div class="row text-center">
+                        <!-- PAGINATION START -->
+                        <div class="col-12 mt-4">
+                            <div class="d-md-flex align-items-center text-center justify-content-between">
+                                <span class="text-muted me-3">Total Slider : <span th:text="${totalService}"></span>
+                                </span>
+                                <ul th:if="${totalPages>1}" class="pagination justify-content-end mb-0 list-unstyled">
+                                    <li class="page-item">
+                                        <a th:if="${currentPage >1}"
+                                            th:href="@{'/slidersManagementfilterCategory/page/'+ ${currentPage - 1} }"
+                                            class="page-link" href="" aria-label="Prev">Prev</a>
+                                        <span class="page-link pe-none" th:unless="${currentPage >1}">Prev</span>
+                                    </li>
+                                    <span th:each="i:${#numbers.sequence(1,totalPages)}">
+                                        <li class="page-item"><a th:if="${currentPage != i}"
+                                                th:href="@{'/slidersManagement/page/'+${i}}" class="page-link"
+                                                href="">[[${i}]]</a>
+                                        </li>
+                                        <li th:unless="${currentPage != i}" class="page-item active"><a
+                                                class="page-link" href="">[[${i}]]</a></li>
+                                    </span>
+                                    <li class="page-item">
+                                        <a th:if="${currentPage < totalPages}"
+                                            th:href="@{'/slidersManagement/page/'+ ${currentPage + 1}}"
+                                            class="page-link" href="" aria-label="Next">Next</a>
+                                        <span class="page-link pe-none"
+                                            th:unless="${currentPage < totalPages}">Next</span>
+                                    </li>
+                                </ul><!--end pagination-->
+                            </div>
+                        </div><!--end col-->
+                        <!-- PAGINATION END -->
+                    </div><!--end row-->
+                </div>
+            </div><!--end container-->
+            <div class="container">
+                <div class="my-2">
+                    <h3 style="color: gray;">Preview:</h3>
+                    <div id="imageCarousel" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ul class="carousel-indicators">
+                            <li data-target="#imageCarousel" th:data-slide-to="${preview.position-1}"
+                                th:each="preview:${previewSlider}"></li>
+                        </ul>
+
+                        <!-- Slides -->
+                        <div class="carousel-inner">
+                            <div style="height: 600px;" class="carousel-item active" th:each="preview:${previewSlider}"
+                                th:if="${preview.position==1}">
+                                <a th:href="${preview.backlink}" target="_blank">
+                                    <img style="width: 100%; object-fit: cover;   
+                                    " th:src="@{${preview.image}}" alt="Image 1">
+
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h3 class="bg-text" th:text="${preview.title}"></h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div style="height: 600px;" class="carousel-item" th:each="preview:${previewSlider}"
+                                th:if="${preview.position!=1}">
+                                <a th:href="${preview.backlink}" target="_blank">
+                                    <img style="width: 100%; object-fit: cover;   
+                                    " th:src="@{${preview.image}}" alt="Image 1">
+
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h3 class="bg-text" th:text="${preview.title}"></h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Left and right controls -->
+                        <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Start -->
+            <footer class="bg-white shadow py-3">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="text-sm-start text-center">
+                                <p class="mb-0 text-muted">
+                                    <script>document.write(new Date().getFullYear())</script> © Doctris. Design with <i
+                                        class="mdi mdi-heart text-danger"></i> by <a href="../../../dashboard"
+                                        target="_blank" class="text-reset">Shreethemes</a>.
+                                </p>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end container-->
+            </footer><!--end footer-->
+    </div>
+    <!-- End -->
+    </main>
+    <!--End page-content" -->
+    </div>
+    <!-- page-wrapper -->
+
+
+    <!-- Modal start -->
+    <!-- Profile Settings Start -->
+    <div class="modal fade" id="editprofile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">Position Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 pt-4 row">
+                    <div class="col-6 align-items-center" style="border-right: 1px solid rgba(0, 0, 0, 0.288);">
+                        <h3 class="ml-3">Hidden Slider ID</h3>
+                        <div id="leftPosition">
+                            <input th:each="slider:${hiddenList}" class="list" draggable="true" th:value="${slider.id}"
+                                name="list">
+                            </input>
+                        </div>
+                    </div><!--end row-->
+                    <div class="col-6 align-items-center">
+                        <h3 class="ml-3">Display Slider ID</h3>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form th:action="@{/slidersManagement/position}" id="positionForm" method="post"
+                                    onsubmit="return validPos();">
+                                    <div id="rightPosition" name="listItems">
+                                        <input th:each="slider: ${previewSlider}" class="list" draggable="true"
+                                            th:value="${slider.id}" name="list"></input>
+                                    </div>
+                                    <div id="validationpos" class="mt-2"></div>
+                                </form>
+
+                                <input type="submit" id="submitButton" class="btn btn-primary" value="Save changes">
+
+                                <script>
+                                    document.getElementById("submitButton").addEventListener("click", function () {
+                                        document.getElementById("positionForm").submit();
+                                    });
+
+                                    function validPos() {
+                                        var rightPosition = document.getElementById("rightPosition");
+                                        var inputTags = rightPosition.getElementsByTagName("input");
+
+                                        console.log("Number of input tags:", inputTags.length); // Debugging statement
+
+                                        if (inputTags.length === 0) {
+                                            var validationpos = document.getElementById("validationpos");
+                                            validationpos.innerHTML = "Error: There are no input tags in the 'rightPosition' div.";
+                                            return false; // Prevent form submission
+                                        }
+
+                                        return true; // Allow form submission
+                                    }
+                                </script>
+
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let lists = document.getElementsByClassName("list")
+        let rightBox = document.getElementById("rightPosition")
+        var leftBox = document.getElementById("leftPosition")
+
+
+        for (let index = 0; index < lists.length; index++) {
+            const list = lists[index];
+            list.addEventListener("dragstart", function (e) {
+                let selected = e.target
+
+                rightBox.addEventListener("dragover", function (e) {
+                    e.preventDefault();
+                })
+                rightBox.addEventListener("drop", function (e) {
+                    rightBox.appendChild(selected)
+                    selected = null;
+                })
+                leftBox.addEventListener("dragover", function (e) {
+                    e.preventDefault();
+                })
+                leftBox.addEventListener("drop", function (e) {
+                    leftBox.appendChild(selected)
+                    selected = null;
+                })
+            })
+        }
+
+    </script>
+    <!-- Profile Settings End -->
+
+    <!-- Start Modal -->
+    <div class="modal fade position-fixed" id="newblogadd" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Slider</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-3 pt-4">
+
+                    <form name="addBlog" th:action="@{/slidersManagement/addSlider}" method="post"
+                        enctype="multipart/form-data" onsubmit="return validateLink();">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="d-grid">
+                                    <p class="text-muted">Upload your slider image here, Please click "Upload Image"
+                                        Button.
+                                    </p>
+                                    <div
+                                        class=" preview-box d-block justify-content-center rounded shadow overflow-hidden bg-light p-1">
+                                    </div>
+                                    <input type="file" id="input-file" name="image" accept="image/*"
+                                        onchange={handleChange()} hidden />
+                                    <label class="btn-upload btn btn-primary mt-4" for="input-file">Upload Image</label>
+                                </div>
+                            </div><!--end col-->
+
+                            <div class="col-md-8 mt-4 mt-sm-0">
+                                <div class="ms-md-4">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Slider Title <span
+                                                        class="text-danger">*</span></label>
+                                                <input required name="title" id="name" type="text" class="form-control"
+                                                    placeholder="Slider Title :">
+                                            </div>
+                                        </div><!--end col-->
+
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Back Link <span
+                                                        class="text-danger">*</span></label>
+                                                <input required name="backlink" id="linkInput" type="text"
+                                                    class="form-control" placeholder="Back Link:">
+                                            </div>
+                                            <div id="validationStatus" class="mt-2"></div>
+                                        </div><!--end col-->
+                                        <script>
+                                        </script>
+
+                                        <div class="col-lg-12 text-end">
+                                            <button type="submit" class="btn btn-primary">Add Slider</button>
+                                        </div><!--end col-->
+                                    </div>
+                    </form>
+                </div>
+            </div><!--end col-->
+        </div><!--end row-->
+    </div>
+
+    <!-- End modal -->
+
+    <!-- javascript -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <!-- simplebar -->
+    <script th:src="@{/js/simplebar.min.js}"></script>
+    <!-- Icons -->
+    <script th:src="@{/js/feather.min.js}"></script>
+    <!-- bootstrap -->
+    <script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js}"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js}"></script>
+
+    <!-- Main Js -->
+    <script th:src="@{/js/app.js}"></script>
+    <script>
+        const handleChange = () => {
+            const fileUploader = document.querySelector('#input-file');
+            const getFile = fileUploader.files
+            if (getFile.length !== 0) {
+                const uploadedFile = getFile[0];
+                readFile(uploadedFile);
+            }
+        }
+
+        const readFile = (uploadedFile) => {
+            if (uploadedFile) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const parent = document.querySelector('.preview-box');
+                    parent.innerHTML = `<img class="preview-content" src=${reader.result} />`;
+                };
+
+                reader.readAsDataURL(uploadedFile);
+            }
+        };
+    </script>
+</body>
+
+</html>

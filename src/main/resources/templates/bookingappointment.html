@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Doctris - Doctor Appointment Booking System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Bootstrap 4 Landing Page Template" />
+    <meta name="keywords" content="Appointment, Booking, System, Dashboard, Health" />
+    <meta name="author" content="Shreethemes" />
+    <meta name="email" content="support@shreethemes.in" />
+    <meta name="website" content="https://shreethemes.in" />
+    <meta name="Version" content="v1.2.0" />
+    <!-- favicon -->
+    <link th:href="@{images/favicon.ico.png}" rel="shortcut icon" href="images/favicon.ico.png">
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link th:href="@{/css/select2.min.css}" href="css/select2.min.css" rel="stylesheet" />
+    <!-- Date picker -->
+    <link th:href="@{/css/flatpickr.min.css}" rel="stylesheet" href="css/flatpickr.min.css">
+    <link th:href="@{/css/jquery.timepicker.min.css}" href="css/jquery.timepicker.min.css" rel="stylesheet" />
+    <!-- Icons -->
+    <link th:href="@{/css/materialdesignicons.min.css}" href="css/materialdesignicons.min.css" rel="stylesheet" />
+    <link th:href="@{/css/remixicon.css}" href="css/remixicon.css" rel="stylesheet" />
+    <link th:href="@{/css/https://unicons.iconscout.com/release/v3.0.6/css/line.css}"
+        href="https://unicons.iconscout.com/release/v3.0.6/css/line.css" rel="stylesheet">
+    <!-- Css -->
+    <link th:href="@{/css/style.min.css}" href="css/style.min.css" rel="stylesheet" id="theme-opt" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Navbar STart -->
+    <header id="topnav" class="defaultscroll sticky">
+        <div class="container">
+            <!-- Logo container-->
+            <div>
+                <a class="logo" href="home">
+                    <span >
+                        <img src="images/logo-dark.png" class="l-dark" height="24" alt="">
+                        <img src="images/logo-dark.png" class="l-light" height="24" alt="">
+                    </span>
+                    <img src="images/logo-dark.png" height="24" class="logo-dark-mode" alt="">
+                </a>
+            </div>
+            <!-- End Logo container-->
+
+            <!-- Start Mobile Toggle -->
+            <div class="menu-extras">
+                <div class="menu-item">
+                    <!-- Mobile menu toggle-->
+                    <a class="navbar-toggle" id="isToggle" onclick="toggleMenu()">
+                        <div class="lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </a>
+                    <!-- End mobile menu toggle-->
+                </div>
+            </div>
+
+            <ul th:if="${session.user != NULL}" class="dropdowns list-inline mb-0">
+
+
+                <li class="list-inline-item mb-0 ms-1">
+                    <a href="javascript:void(0)" class="btn btn-icon btn-pills btn-primary" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+                        <i class="uil uil-search"></i>
+                    </a>
+                </li>
+
+                <li class="list-inline-item mb-0 ms-1">
+                    <div class="dropdown dropdown-primary">
+                        <button type="button" class="btn btn-pills btn-soft-primary dropdown-toggle p-0"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                                th:src="${session.user.image}" src="images/doctors/01.jpg"
+                                class="avatar avatar-ex-small rounded-circle" alt=""></button>
+                        <div class="dropdown-menu dd-menu dropdown-menu-end bg-white shadow border-0 mt-3 py-3"
+                            style="min-width: 200px;">
+                            <a class="dropdown-item d-flex align-items-center text-dark" href="user-profile">
+                                
+                                <img th:src="${session.user.image}" src=""
+                                    class="avatar avatar-md-sm rounded-circle border shadow" alt="" >
+                                <div class="flex-1 ms-2">
+                                    <span th:text="${session.user.full_name}" class="d-block mb-1"></span>
+                                    <!-- <small  class="text-muted">Orthopedic</small> -->
+                                </div>
+                            </a>
+                            <a class="dropdown-item text-dark" th:href="@{/admin/dashboard}" th:if="${session.user.role_id.role_id != 1}"><span
+                                class="mb-0 d-inline-block me-1"><i
+                                    class="uil uil-dashboard align-middle h6"></i></span> Dashboard</a>
+                            <a class="dropdown-item text-dark" href="/myreservation"><span class="mb-0 d-inline-block me-1"><i
+                                        class="uil uil-dashboard align-middle h6"></i></span> My reservation</a>
+                            <a class="dropdown-item text-dark" href="user-profile"><span
+                                    class="mb-0 d-inline-block me-1"><i
+                                        class="uil uil-setting align-middle h6"></i></span> Profile Settings</a>
+                            <div class="dropdown-divider border-top"></div>
+                            <a class="dropdown-item text-dark" th:href="@{/logout}" href="logout"><span
+                                    class="mb-0 d-inline-block me-1"><i
+                                        class="uil uil-sign-out-alt align-middle h6"></i></span> Logout</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul th:if="${session.user == NULL}" class="dropdowns list-inline mb-8">
+
+                <li class="list-inline-item mb-0">
+                    <a href="login">
+                        <div class="btn btn-primary">Login/signup</div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="dropdowns list-inline mb-8">
+                <!-- <li class="list-inline-item mb-0">
+                        <a href="" >
+                            <div class="btn btn-primary">Book Appointment</div>
+                        </a>
+                    </li> -->
+                <li class="list-inline-item mb-0">
+                    <a href="bookingappointment">
+                        <div class="btn btn-primary">Book Appointment</div>
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- Start Dropdown -->
+
+            <div id="navigation">
+                <!-- Navigation Menu-->
+                <ul class="navigation-menu nav-left ">
+                    <li class="has-submenu parent-menu-item">
+                        <a href="/home">Home</a>
+
+                    </li>
+
+                    <li class="has-submenu parent-parent-menu-item">
+                        <a href="/doctor">Doctors</a>
+
+                    </li>
+
+                    <li class="has-submenu parent-parent-menu-item">
+                        <a href="/service">Services</a>
+
+                    </li>
+
+                    <li class="has-submenu parent-parent-menu-item">
+                        <a href="/blog">Blog</a>
+
+                        <!-- </li>
+                        
+                            <li th:if="${u!=null && u.role==2}" class="has-submenu parent-parent-menu-item">
+                                <a href="#">Dashboard</a>
+                                
+                        </li> -->
+
+
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!-- Navbar End -->
+
+    <!-- Start Hero -->
+    <!-- <section class="bg-half-170 d-table w-100 bg-light">
+        <div class="container">
+            <div class="row mt-5 justify-content-center">
+                <div class="col-12">
+                    <div class="section-title text-center">
+                        <h3 class="sub-title mb-4">Book an appointment</h3>
+                        <p class="para-desc mx-auto text-muted">Great doctor if you need your family member to get
+                            effective immediate assistance, emergency treatment or a simple consultation.</p>
+
+                        <nav aria-label="breadcrumb" class="d-inline-block mt-3">
+                            <ul class="breadcrumb bg-transparent mb-0 py-1">
+                                <li class="breadcrumb-item"><a href="index.html">Doctris</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Appointment</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    <div class="position-relative">
+        <div class="shape overflow-hidden text-white">
+            <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+            </svg>
+        </div>
+    </div>
+    <!-- End Hero -->
+
+    <!-- Start -->
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow rounded overflow-hidden">
+                        <ul class="nav nav-pills nav-justified flex-column flex-sm-row rounded-0 shadow overflow-hidden bg-light mb-0"
+                            id="pills-tab" role="tablist">
+
+                            <li class="nav-item">
+                                <a class="nav-link rounded-0 active" id="online-booking" data-bs-toggle="pill"
+                                    href="#pills-online" role="tab" aria-controls="pills-online" aria-selected="false">
+                                    <div class="text-center pt-1 pb-1">
+                                        <h4 class="title fw-normal mb-0">Online Reservation</h4>
+                                    </div>
+                                </a><!--end nav link-->
+                            </li><!--end nav item-->
+                        </ul>
+
+                        <div class="tab-content p-4" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-clinic" role="tabpanel"
+                                aria-labelledby="online-booking">
+                                <form action="" th:action="@{/reservationcontact}" method="get">
+                                    <div class="row">
+                                        <!-- <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Patient Name <span
+                                                        class="text-danger">*</span></label>
+                                                <input name="patient_name" id="name2" type="text" class="form-control"
+                                                    placeholder="Patient Name:">
+                                            </div>
+                                        </div> -->
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Chuyen Khoa</label>
+                                                <select class="form-control department-name select2input"
+                                                    id="categoryserviceId" name="categoryserviceId">
+                                                    <option value="">Select Service</option>
+                                                    <!-- <option value="0">Chưa xác định chuyên khoa</option> -->
+                                                    <option th:each="service:${listCategoryService}"
+                                                        th:text="${service.name}" th:value="${service.id}"></option>
+
+                                                </select>
+
+                                                <div class="text-danger" id="errorCategory"></div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6" id="serviceIds">
+                                            <div class="mb-3">
+                                                <label class="form-label">Service</label>
+
+                                                <select multiple class="form-control department-name select2input"
+                                                    id="serviceId" name="serviceId">
+
+                                                </select>
+                                                <div class="text-danger" id="errorService"></div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6" id="doctorIds">
+                                            <div class="mb-3">
+                                                <label class="form-label">Doctor</label>
+                                                <select class="form-control department-name " id="doctorId"
+                                                    name="doctorId">
+
+                                                </select>
+
+                                                <div class="text-danger" id="errorDoctor"></div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date</label>
+
+                                                <select class="form-control department-name " id="date" name="date">
+                                                </select>
+                                                <div class="text-danger" id="errorDate"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Time</label>
+                                                <select class="form-control department-name" id="time" name="time">
+
+                                                </select>
+                                                <div class="text-danger" id="errorTime"></div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <!-- <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Comments <span
+                                                        class="text-danger">*</span></label>
+                                                <textarea name="comments" id="comments2" rows="4" class="form-control"
+                                                    placeholder="Your Message :"></textarea>
+                                            </div>
+                                        </div> -->
+                                        <div id="messReser" th:text="${messageReser}"
+                                            style="color: red; margin-bottom: 10px;"></div>
+                                        <div class="col-lg-12">
+                                            <div class="d-grid">
+                                                <button type="submit" id="btnContinue" class="btn btn-primary">Continue
+                                                    Reservation</button>
+                                            </div>
+
+                                        </div><!--end col-->
+                                    </div><!--end row-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end container-->
+    </section><!--end section-->
+    <!-- End -->
+
+    <!-- Start -->
+    <footer class="bg-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5 col-lg-4 mb-0 mb-md-4 pb-0 pb-md-2">
+                    <a href="#" class="logo-footer">
+                        <img src="images/logo-light.png" height="22" alt="">
+                    </a>
+                    <p class="mt-4 me-xl-5">Great doctor if you need your family member to get effective immediate
+                        assistance, emergency treatment or a simple consultation.</p>
+                </div><!--end col-->
+
+                <div class="col-xl-7 col-lg-8 col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                            <h5 class="text-light title-dark footer-head">Company</h5>
+                            <ul class="list-unstyled footer-list mt-4">
+                                <li><a href="aboutus.html" class="text-foot"><i class="mdi mdi-chevron-right me-1"></i>
+                                        About us</a></li>
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Services</a></li>
+                                <li><a href="doctor-team-two.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Team</a></li>
+                                <li><a href="blog-detail.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Project</a></li>
+                                <li><a href="blogs.html" class="text-foot"><i class="mdi mdi-chevron-right me-1"></i>
+                                        Blog</a></li>
+                                <li><a href="login.html" class="text-foot"><i class="mdi mdi-chevron-right me-1"></i>
+                                        Login</a></li>
+                            </ul>
+                        </div><!--end col-->
+
+                        <div class="col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                            <h5 class="text-light title-dark footer-head">Departments</h5>
+                            <ul class="list-unstyled footer-list mt-4">
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Eye Care</a></li>
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Psychotherapy</a></li>
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Dental Care</a></li>
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Orthopedic</a></li>
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Cardiology</a></li>
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Gynecology</a></li>
+                                <li><a href="departments.html" class="text-foot"><i
+                                            class="mdi mdi-chevron-right me-1"></i> Neurology</a></li>
+                            </ul>
+                        </div><!--end col-->
+
+                        <div class="col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                            <h5 class="text-light title-dark footer-head">Contact us</h5>
+                            <ul class="list-unstyled footer-list mt-4">
+                                <li class="d-flex align-items-center">
+                                    <i data-feather="mail" class="fea icon-sm text-foot align-middle"></i>
+                                    <a href="mailto:contact@example.com" class="text-foot ms-2">contact@example.com</a>
+                                </li>
+
+                                <li class="d-flex align-items-center">
+                                    <i data-feather="phone" class="fea icon-sm text-foot align-middle"></i>
+                                    <a href="tel:+152534-468-854" class="text-foot ms-2">+152 534-468-854</a>
+                                </li>
+
+                                <li class="d-flex align-items-center">
+                                    <i data-feather="map-pin" class="fea icon-sm text-foot align-middle"></i>
+                                    <a href="javascript:void(0)" class="video-play-icon text-foot ms-2">View on Google
+                                        map</a>
+                                </li>
+                            </ul>
+
+                            <ul class="list-unstyled social-icon footer-social mb-0 mt-4">
+                                <li class="list-inline-item"><a href="#" class="rounded-pill"><i data-feather="facebook"
+                                            class="fea icon-sm fea-social"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="rounded-pill"><i
+                                            data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="rounded-pill"><i data-feather="twitter"
+                                            class="fea icon-sm fea-social"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="rounded-pill"><i data-feather="linkedin"
+                                            class="fea icon-sm fea-social"></i></a></li>
+                            </ul><!--end icon-->
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end container-->
+
+
+    </footer><!--end footer-->
+    <!-- End -->
+
+    <!-- Back to top -->
+
+    <!-- Back to top -->
+
+
+
+
+
+    <!-- javascript -->
+    <script th:src="@{/js/jquery.min.js}" src="js/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}" src="js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script th:src="@{/js/select2.min.js}" src="js/select2.min.js"></script>
+    <script th:src="@{/js/select2.init.js}" src="js/select2.init.js"></script>
+    <!-- Datepicker -->
+    <script th:src="@{/js/flatpickr.min.js}" src="js/flatpickr.min.js"></script>
+    <script th:src="@{/js/flatpickr.init.js}" src="js/flatpickr.init.js"></script>
+    <!-- Datepicker -->
+    <script th:src="@{/js/jquery.timepicker.min.js}" src="js/jquery.timepicker.min.js"></script>
+    <script th:src="@{/js/timepicker.init.js}" src="js/timepicker.init.js"></script>
+    <!-- Icons -->
+    <script th:src="@{/js/feather.min.js}" src="js/feather.min.js"></script>
+    <!-- Main Js -->
+    <!-- <script th:src="@{/js/app.js}" src="js/app.js"></script> -->
+
+    <script>
+        //onchange  category service id  -> list service append to serviceId 
+        $(document).ready(function () {
+
+            $("#categoryserviceId").change(function () {
+                var categoryserviceId = $("#categoryserviceId").val();
+                if (categoryserviceId == 0) {
+
+                    $("#date").val("").trigger("change");
+                    $("#time").val("").trigger("change");
+                    $("#doctorId").val("").trigger("change");
+                    $("#serviceId").val("").trigger("change");
+                    $("#date").append('<option value="">Select Date</option>');
+                    $.ajax({
+                        url: "getDate",
+                        type: "GET",
+                        success: function (data) {
+                            // $("#date").val("").trigger("change");
+                            // $("#time").val("").trigger("change");
+                            $("#doctorId").val("").trigger("change");
+                            $("#serviceId").val("").trigger("change");
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0);
+
+                            $.each(data, function (key, value) {
+                                const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                                const dayIndex = value.dayof_week;
+                                const targetDate = new Date(today);
+                                if (dayIndex <= today.getDay()) {
+                                    targetDate.setDate(targetDate.getDate() + (7 - today.getDay() + dayIndex));
+                                }
+                                else {
+                                    targetDate.setDate(targetDate.getDate() + (dayIndex - today.getDay()));
+                                }
+                                let dayOfWeek = daysOfWeek[value.dayof_week - 1];
+                                if (dayOfWeek == undefined) {
+                                    dayOfWeek = daysOfWeek[6];
+                                }
+                                const dateStr = targetDate.toISOString().slice(0, 10);
+                                $("#date").append('<option value="' + dateStr + '">' + dayOfWeek + ', ' + dateStr + '</option>');
+                            });
+                        }
+                    });
+                    $("#date").change(function () {
+                        var date = $("#date").val();
+                        $.ajax({
+                            url: "getTime/" + date,
+                            type: "GET",
+                            success: function (data) {
+                                $("#time").empty();
+                                $("#time").append('<option value="">Select Time</option>');
+                                $.each(data, function (key, value) {
+                                    var time = value.start_time + ' - ' + value.end_time;
+                                    $("#time").append('<option value="' + time + '">' + value.start_time + ' - ' + value.end_time + '</option>');
+                                });
+                            }
+                        });
+                    });
+
+                } else {
+                    //show  input service and doctor
+                    $("#date").val("").trigger("change");
+                    $("#time").val("").trigger("change");
+                    $("#doctorId").val("").trigger("change");
+                    $("#serviceId").val("").trigger("change");
+                    $.ajax({
+                        url: "getServiceByCategoryServiceId/" + categoryserviceId,
+                        type: "GET",
+                        success: function (data) {
+                            $("#date").val("").trigger("change");
+                            $("#time").val("").trigger("change");
+                            $("#doctorId").val("").trigger("change");
+                            $("#serviceId").empty();
+
+                            $.each(data, function (key, value) {
+                                $("#serviceId").append('<option value="' + value.service_id + '">' + value.service_name + '</option>');
+                            });
+                        }
+                    });
+                    $.ajax({
+                        url: "getDoctorByCategoryServiceId/" + categoryserviceId,
+                        type: "GET",
+                        success: function (data) {
+                            $("#doctorId").empty();
+                            $("#date").empty();
+                            $("#time").empty();          
+                            $("#doctorId").append('<option value="">Select Doctor</option>');
+                            $.each(data, function (key, value) {
+                                $("#doctorId").append('<option value="' + value.doctor_id + '">' + value.doctor_name + '</option>');
+                            });
+                        }
+                    });
+                }
+
+            });
+        });
+    </script>
+    <script>
+
+        //onchange doctorId -> list date append to date 
+        $(document).ready(function () {
+
+            $("#doctorId").change(function () {
+                var doctorId = $("#doctorId").val();
+                $.ajax({
+                    url: "getSlotsByDoctor/" + doctorId,
+                    type: "GET",
+                    success: function (data) {
+                        $("#date").empty();
+                        $("#date").append('<option value="">Select Date</option>');
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+
+                        $.each(data, function (key, value) {
+                            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                            const dayIndex = value.dayof_week;
+                            const targetDate = new Date(today);
+                            if (dayIndex <= today.getDay()) {
+                                targetDate.setDate(targetDate.getDate() + (7 - today.getDay() + dayIndex));
+                            }
+
+                            else {
+                                targetDate.setDate(targetDate.getDate() + (dayIndex - today.getDay()));
+                            }
+                            let dayOfWeek = daysOfWeek[value.dayof_week - 1];
+                            if (dayOfWeek == undefined) {
+                                dayOfWeek = daysOfWeek[6];
+                            }
+                            const dateStr = targetDate.toISOString().slice(0, 10);
+                            $("#date").append('<option value="' + dateStr + '">' + dayOfWeek + ', ' + dateStr + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        //onchange date -> list time append to time 
+        $(document).ready(function () {
+            $("#date").change(function () {
+                var doctorId = $("#doctorId").val();
+                var date = $("#date").val();
+                $.ajax({
+                    url: "getTimeByDoctorAndDate/" + doctorId + "/" + date,
+                    type: "GET",
+                    success: function (data) {
+                        $("#time").empty();
+                        $("#time").append('<option value="">Select Time</option>');
+                        $.each(data, function (key, value) {
+                            const time = value.start_time + ' - ' + value.end_time;
+                            $("#time").append('<option value="' + time + '">' + value.start_time + ' - ' + value.end_time + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        //if categoryserviceId == 0 -> disable input service and doctor
+        $(document).ready(function () {
+            $("#categoryserviceId").change(function () {
+                var categoryserviceId = $("#categoryserviceId").val();
+                if (categoryserviceId == 0) {
+                    $("#serviceId").prop('disabled', true);
+                    $("#doctorId").prop('disabled', true);
+                    $("#serviceIds").css("display", "none");
+                    $("#doctorIds").css("display", "none");
+                } else {
+                    $("#serviceId").prop('disabled', false);
+                    $("#doctorId").prop('disabled', false);
+                    $("#serviceIds").css("display", "block");
+                    $("#doctorIds").css("display", "block");
+                }
+            });
+        });
+    </script>
+    <script>
+        //check time is after current time -> disable button continue reservation 
+        $(document).ready(function () {
+            $("#time").change(function () {
+                var time = $("#time").val();
+                var date = $("#date").val();
+                var today = new Date();
+                var timeNow = today.getHours() + ":" + today.getMinutes();
+                if (date == today.toISOString().slice(0, 10)) {
+                    if (time < timeNow) {
+                        $("#btnContinue").prop('disabled', true);
+                        $("#messReser").text("Time is invalid");
+                    } else {
+                        $("#btnContinue").prop('disabled', false);
+                        $("#messReser").text("");
+                    }
+                } else {
+                    $("#btnContinue").prop('disabled', false);
+                    $("#messReser").text("");
+                }
+            });
+        });
+        
+        
+    </script>
+    <script>
+        //check all input is not null -> disable button continue reservation 
+        $(document).ready(function () {
+            $("#btnContinue").click(function () {
+                var categoryserviceId = $("#categoryserviceId").val();
+                var serviceId = $("#serviceId").val();
+                var doctorId = $("#doctorId").val();
+                var date = $("#date").val();
+                var time = $("#time").val();
+                if (categoryserviceId == 0) {
+                    if (date == "" || time == "" || doctorId == "") {
+                        $("#btnContinue").prop('disabled', true);
+                        $("#messReser").text("Please fill in all information");
+                    } else {
+                        $("#btnContinue").prop('disabled', false);
+                        $("#messReser").text("");
+                    }
+                } else {
+                    if (date == "" || time == "" || doctorId == "" || serviceId == "") {
+                        $("#btnContinue").prop('disabled', true);
+                        $("#messReser").text("Please fill in all information");
+                    } else {
+                        $("#btnContinue").prop('disabled', false);
+                        $("#messReser").text("");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

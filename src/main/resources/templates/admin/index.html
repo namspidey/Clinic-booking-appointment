@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Doctris - Doctor Appointment Booking System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Bootstrap 4 Landing Page Template" />
+    <meta name="keywords" content="Appointment, Booking, System, Dashboard, Health" />
+    <meta name="author" content="Shreethemes" />
+    <meta name="email" content="support@shreethemes.in" />
+    <meta name="website" content="../../../dashboard" />
+    <meta name="Version" content="v1.2.0" />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="../images/favicon.ico.png">
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css" />
+    <!-- simplebar -->
+    <link th:href="@{/css/simplebar.css}" rel="stylesheet" type="text/css" />
+    <!-- Select2 -->
+    <link th:href="@{/css/select2.min.css}" rel="stylesheet" />
+    <!-- Icons -->
+    <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/remixicon.css}" rel="stylesheet" type="text/css" />
+    <link href="https://unicons.iconscout.com/release/v3.0.6/css/line.css" rel="stylesheet">
+    <!-- SLIDER -->
+    <link th:href="@{/css/tiny-slider.css}" rel="stylesheet" />
+    <!-- Css -->
+    <link th:href="@{/css/style.min.css}" rel="stylesheet" type="text/css" id="theme-opt" />
+    <script src="https://kit.fontawesome.com/8320fc5394.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    
+
+    <div class="page-wrapper doctris-theme toggled">
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div lang="en" th:include="admin/sidebar :: sidebar"></div>
+        </nav>
+        <!-- sidebar-wrapper  -->
+
+        <!-- Start Page Content -->
+        <main class="page-content bg-light">
+            <div class="top-header">
+                <div class="header-bar d-flex justify-content-between border-bottom">
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="logo-icon">
+                            <img src="../images/logo-icon.png" height="30" class="small" alt="">
+                            <span class="big">
+                                <img src="../images/logo-dark.png" height="24" class="logo-light-mode" alt="">
+                                <img src="../images/logo-light.png" height="24" class="logo-dark-mode" alt="">
+                            </span>
+                        </a>
+                        <a id="close-sidebar" class="btn btn-icon btn-pills btn-soft-primary ms-2" href="#">
+                            <i class="uil uil-bars"></i>
+                        </a>
+                        <div class="search-bar p-0 d-none d-md-block ms-2">
+                           
+                        </div>
+                    </div>
+
+                    <ul class="list-unstyled mb-0">
+
+
+                        <li class="list-inline-item mb-0 ms-1">
+                            <div class="dropdown dropdown-primary">
+                                <button type="button" class="btn btn-pills btn-soft-primary dropdown-toggle p-0"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                                        th:src="@{${session.user.image}}" class="avatar avatar-ex-small rounded-circle"
+                                        alt=""></button>
+                                <div class="dropdown-menu dd-menu dropdown-menu-end bg-white shadow border-0 mt-3 py-3"
+                                    style="min-width: 200px;">
+                                    <a class="dropdown-item d-flex align-items-center text-dark"
+                                        th:href="@{/user-profile}">
+                                        <img th:src="@{${session.user.image}}"
+                                            class="avatar avatar-md-sm rounded-circle border shadow" alt="">
+                                        <div class="flex-1 ms-2">
+                                            <span class="d-block mb-1" th:text="@{${session.user.full_name}}"></span>
+
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item text-dark" href="dashboard"><span
+                                            class="mb-0 d-inline-block me-1"><i
+                                                class="uil uil-dashboard align-middle h6"></i></span> Dashboard</a>
+                                    <a class="dropdown-item text-dark" th:href="@{/user-profile}"><span
+                                            class="mb-0 d-inline-block me-1"><i
+                                                class="uil uil-setting align-middle h6"></i></span> Profile Settings</a>
+                                    <div class="dropdown-divider border-top"></div>
+                                    <a class="dropdown-item text-dark" th:href="@{/logout}"><span
+                                            class="mb-0 d-inline-block me-1"><i
+                                                class="uil uil-sign-out-alt align-middle h6"></i></span> Logout</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="layout-specing">
+                    <h5 class="mb-0">Dashboard</h5>
+
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-4 col-md-4 mt-4">
+                            <div class="card features feature-primary rounded border-0 shadow p-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon text-center rounded-md">
+                                        <i class="uil uil-bed h3 mb-0"></i>
+                                    </div>
+                                    <div class="flex-1 ms-2">
+                                        <h5 class="mb-0" th:text="${numPatient}"></h5>
+                                        <p class="text-muted mb-0">Patients</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+
+                        <!-- <div class="col-xl-2 col-lg-4 col-md-4 mt-4">
+                            <div class="card features feature-primary rounded border-0 shadow p-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon text-center rounded-md">
+                                        <i class="uil uil-file-medical-alt h3 mb-0"></i>
+                                    </div>
+                                    <div class="flex-1 ms-2">
+                                        <h5 class="mb-0">$2164</h5>
+                                        <p class="text-muted mb-0">Avg. costs</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="col-xl-2 col-lg-4 col-md-4 mt-4">
+                            <div class="card features feature-primary rounded border-0 shadow p-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon text-center rounded-md">
+                                        <i class="uil uil-user-md h3 mb-0"></i>
+                                    </div>
+                                    <div class="flex-1 ms-2">
+                                        <h5 class="mb-0" th:text="${numDoctors}">112</h5>
+                                        <p class="text-muted mb-0">Staff Members</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+
+                        <!-- <div class="col-xl-2 col-lg-4 col-md-4 mt-4">
+                            <div class="card features feature-primary rounded border-0 shadow p-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon text-center rounded-md">
+                                        <i class="uil uil-ambulance h3 mb-0"></i>
+                                    </div>
+                                    <div class="flex-1 ms-2">
+                                        <h5 class="mb-0">16</h5>
+                                        <p class="text-muted mb-0">Vehicles</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div> -->
+
+                        <div class="col-xl-2 col-lg-4 col-md-4 mt-4">
+                            <div class="card features feature-primary rounded border-0 shadow p-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon text-center rounded-md">
+                                        <i class="uil uil-medkit h3 mb-0"></i>
+                                    </div>
+                                    <div class="flex-1 ms-2">
+                                        <h5 class="mb-0" th:text="${numAppointment}"></h5>
+                                        <p class="text-muted mb-0">Reservation</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+
+                        <div class="col-xl-2 col-lg-4 col-md-4 mt-4">
+                            <div class="card features feature-primary rounded border-0 shadow p-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon text-center rounded-md">
+                                        <i class="uil uil-hospital h3 mb-0"></i>
+                                    </div>
+                                    <div class="flex-1 ms-2">
+                                        <h5 class="mb-0" th:text="${depNum}"></h5>
+                                        <p class="text-muted mb-0">Departments</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 mt-4">
+                            <div class="card shadow border-0 p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="align-items-center mb-0">Reservation by year (<span th:text="${totalperyear}"></span>) </h6>
+
+                                    <div class="mb-0 position-relative">
+                                        <form th:action="@{/admin/dashboard}" method="GET" id="yearForm">
+                                            <select name="year" id="yearDropdown">
+                                                <option th:each="year : ${#numbers.sequence(minYear, maxYear)}"
+                                                    th:selected="${year == selectedYear}" th:value="${year}">
+                                                    <a th:href="@{'/admin/dashboard?year=' + ${year}}"
+                                                        th:text="${year}">
+                                                    </a>
+                                                </option>
+                                            </select>
+                                        </form>
+
+                                        <script>
+                                            document.getElementById("yearDropdown").addEventListener("change", function () {
+                                                var form = document.getElementById("yearForm");
+                                                var selectedYear = this.value;
+                                                form.submit();
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                                <div id="patientchart" class="apex-chart"></div>
+                            </div>
+                        </div><!--end col-->
+
+                        <!-- <div class="col-xl-4 col-lg-5 mt-4">
+                            <div class="card shadow border-0 p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="align-items-center mb-0">Patients by Department</h6>
+
+                                    <div class="mb-0 position-relative">
+                                        <select class="form-select form-control" id="dailychart">
+                                            <option selected>Today</option>
+                                            <option value="2019">Yesterday</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="department" class="apex-chart"></div>
+                            </div>
+                        </div> -->
+                    </div><!--end row-->
+
+
+                </div>
+            </div><!--end container-->
+
+            <!-- Footer Start -->
+            <footer class="bg-white shadow py-3">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="text-sm-start text-center">
+                                <p class="mb-0 text-muted">
+                                    <script>document.write(new Date().getFullYear())</script> © Doctris. Design with <i
+                                        class="mdi mdi-heart text-danger"></i> by <a href="../../../dashboard"
+                                        target="_blank" class="text-reset">Shreethemes</a>.
+                                </p>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end container-->
+            </footer><!--end footer-->
+            <!-- End -->
+        </main>
+        <!--End page-content" -->
+    </div>
+    <!-- page-wrapper -->
+
+
+    <!-- javascript -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <!-- simplebar -->
+    <script th:src="@{/js/simplebar.min.js}"></script>
+    <!-- Chart -->
+    <script th:src="@{https://cdn.jsdelivr.net/npm/apexcharts}"></script>
+    <!-- Icons -->
+    <script th:src="@{/js/feather.min.js}"></script>
+    <!-- Main Js -->
+    <script th:src="@{/js/app.js}"></script>
+
+    <script th:inline="javascript">
+
+        var monthlyReservationData = [ /* Iterate through the data and create a JavaScript array */
+            /*[# th:each="reservations, i : ${monthlyReservationData}"]*/
+                /*[[${reservations}]]*/ /* Fetch each monthly reservation data */
+                /* th:unless="${i.index == #lists.size(monthlyReservationData) - 1}" */, /* Add a comma for all elements except the last one */
+            /*[/]*/
+        ];
+
+        var options = {
+            series: [{
+                name: "Reservations",
+                data: monthlyReservationData
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'],
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#patientchart"), options);
+        chart.render();
+    </script>
+
+</body>
+
+</html>
